@@ -18,6 +18,7 @@ type Item struct {
 func (i Item) Title() string       { return i.TITLE }
 func (i Item) Description() string { return i.DESC }
 func (i Item) FilterValue() string { return i.DESC }
+
 func addItem(title string, path string) {
 	data.Item = append(data.Item, Item{TITLE: title, DESC: path})
 	saveData(data)
@@ -42,7 +43,9 @@ func ListUpdate(m model, msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		case "enter":
 			if len(m.ListModel.list.Items()) > 0 && m.ListModel.list.FilterState() != list.Filtering {
-				choice := m.ListModel.list.Items()[m.ListModel.list.Index()].FilterValue()
+				choice := m.ListModel.
+					list.Items()[m.ListModel.list.Index()].
+					FilterValue()
 				OpenFile(choice, editor)
 				return m, tea.Quit
 			}
@@ -50,8 +53,12 @@ func ListUpdate(m model, msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch {
 		case key.Matches(msg, m.keys.deleteItem): //remove item
 			if len(m.ListModel.list.Items()) > 0 {
-				removeItem(data.Item[m.ListModel.list.Index()].FilterValue())
-				m.ListModel.list.RemoveItem(m.ListModel.list.Index())
+				removeItem(data.
+					Item[m.ListModel.list.Index()].
+					FilterValue())
+				m.ListModel.
+					list.
+					RemoveItem(m.ListModel.list.Index())
 			}
 			return m, nil
 		case key.Matches(msg, m.keys.addItem): // add item
@@ -61,11 +68,13 @@ func ListUpdate(m model, msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.state = EditorChoice
 			return m, nil
 		case key.Matches(msg, m.keys.changeItem):
+
 			i := m.ListModel.list.Index()
-                        changetmp = Item{TITLE: data.Item[i].TITLE, DESC: data.Item[i].DESC,}
-                        m.InputModel.inputs[0].SetValue(changetmp.TITLE)
-                        m.InputModel.inputs[1].SetValue(changetmp.DESC)
-                        changeItem = true
+			changetmp = Item{TITLE: data.Item[i].TITLE, DESC: data.Item[i].DESC}
+
+			m.InputModel.inputs[0].SetValue(changetmp.TITLE)
+			m.InputModel.inputs[1].SetValue(changetmp.DESC)
+			changeItem = true
 			m.state = TextInput
 			return m, nil
 		}
