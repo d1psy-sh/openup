@@ -25,6 +25,8 @@ flowchart TD;
 #### Linux:
 
 ```bash
+go install github.com/Horryportier/openup@latest
+# or
 git clone github.com/Horryportier/openup@latest 
 cd openup
 go install .
